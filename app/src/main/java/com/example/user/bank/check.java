@@ -16,7 +16,7 @@ public class check extends AppCompatActivity {
     String db_name = "DBCost";
     String tb_name = "BestCost";
     SQLiteDatabase db;
-    int k,sum=0;
+    int sum=0;
     TextView check_sum;
 
     @Override

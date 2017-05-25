@@ -1,6 +1,10 @@
 package com.example.user.bank;
 
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +13,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 public class login extends AppCompatActivity {
 
@@ -19,11 +25,15 @@ public class login extends AppCompatActivity {
     String login_new_account;
     String login_new_passwd;
 
+    String aa_name = "aa_acount";
+    String login_test = "aa_passwd";
+    SQLiteDatabase aa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
 
         ed1=(EditText) findViewById(R.id.login_account);
         ed2=(EditText) findViewById(R.id.login_password);
@@ -34,6 +44,23 @@ public class login extends AppCompatActivity {
         login_new_passwd=it.getStringExtra("new_passwd");
 
 
+
+        aa = openOrCreateDatabase(aa_name, Context.MODE_PRIVATE, null); //aa.close();
+
+        String createTable = "CREATE TABLE IF NOT EXISTS " + login_test + "(user TEXT,passwd TEXT)";
+        aa.execSQL(createTable);
+
+        if(login_new_account!=null && login_new_passwd!=null ){
+            ContentValues ca = new ContentValues(2);
+            ca.put("user", login_new_account);
+            ca.put("passwd", login_new_passwd);
+            aa.insert(login_test, null  , ca);
+        }
+
+        aa.close();
+
+
+
         login_btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -41,15 +68,52 @@ public class login extends AppCompatActivity {
                 uid = ed1.getText().toString();
                 pw = ed2.getText().toString();
 
-                String test_account="515";
-                String test_passwd="515";
+                String test_account;
+                String test_passwd;
 
-                if(login_new_account==null && login_new_passwd==null) {
+                aa = openOrCreateDatabase(aa_name, Context.MODE_PRIVATE, null);
+                Cursor c = aa.rawQuery("Select * from " + login_test, null);
+
+
+                if(login_new_account==null && login_new_passwd==null ) {
+
                     test_account = "admin";
                     test_passwd = "admin";
+
+                    if( uid.equals(test_account) && pw.equals(test_passwd) ){
+                        Toast.makeText(login.this,"登入成功",Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                    else{
+                        new AlertDialog.Builder(login.this)
+                                .setTitle("bank")
+                                .setMessage("登入失敗")
+                                .setPositiveButton("OK",null)
+                                .show();
+                    }
+
+                }else{
+
+                    c.moveToFirst();
+
+                    if( uid.equals( c.getString(0))  && pw.equals( c.getString(1) )  ){
+                        Toast.makeText(login.this,"登入成功",Toast.LENGTH_SHORT).show();
+                        finish();
+                    }else{
+                        new AlertDialog.Builder(login.this)
+                                .setTitle("bank")
+                                .setMessage("登入失敗")
+                                .setPositiveButton("OK",null)
+                                .show();
+                    }
+
+
                 }
 
-                if(uid.equals(login_new_account) && pw.equals(login_new_passwd)){
+                aa.close();
+
+
+                /*if(uid.equals(login_new_account) && pw.equals(login_new_passwd)){
                     Toast.makeText(login.this,"登入成功",Toast.LENGTH_SHORT).show();
                     finish();
                 }else if( uid.equals(test_account) && pw.equals(test_passwd) ){
@@ -62,27 +126,8 @@ public class login extends AppCompatActivity {
                             .setMessage("登入失敗")
                             .setPositiveButton("OK",null)
                             .show();
-                }
+                }*/
 
-
-
-            /*
-                uid = ed1.getText().toString();
-                pw = ed2.getText().toString();
-
-                if(uid.equals("admin") && pw.equals("admin")){
-
-                    Toast.makeText(login.this,"登入成功",Toast.LENGTH_SHORT).show();
-                    finish();
-
-                }else{
-                    new AlertDialog.Builder(login.this)
-                            .setTitle("bank")
-                            .setMessage("登入失敗")
-                            .setPositiveButton("OK",null)
-                            .show();
-                }
-                */
             }
         });
 
