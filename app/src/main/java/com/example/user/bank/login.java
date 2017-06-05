@@ -43,8 +43,6 @@ public class login extends AppCompatActivity {
         login_new_account=it.getStringExtra("new_account");
         login_new_passwd=it.getStringExtra("new_passwd");
 
-
-
         aa = openOrCreateDatabase(aa_name, Context.MODE_PRIVATE, null); //aa.close();
 
         String createTable = "CREATE TABLE IF NOT EXISTS " + login_test + "(user TEXT,passwd TEXT)";
@@ -58,8 +56,6 @@ public class login extends AppCompatActivity {
         }
 
         aa.close();
-
-
 
         login_btn1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,11 +108,6 @@ public class login extends AppCompatActivity {
                 aa.close();
             }
         });
-
-
-
-
-
 
     }
 }
