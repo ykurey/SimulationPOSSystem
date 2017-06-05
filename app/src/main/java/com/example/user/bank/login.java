@@ -109,25 +109,7 @@ public class login extends AppCompatActivity {
 
 
                 }
-
                 aa.close();
-
-
-                /*if(uid.equals(login_new_account) && pw.equals(login_new_passwd)){
-                    Toast.makeText(login.this,"登入成功",Toast.LENGTH_SHORT).show();
-                    finish();
-                }else if( uid.equals(test_account) && pw.equals(test_passwd) ){
-                    Toast.makeText(login.this,"登入成功",Toast.LENGTH_SHORT).show();
-                    finish();
-                }
-                else{
-                    new AlertDialog.Builder(login.this)
-                            .setTitle("bank")
-                            .setMessage("登入失敗")
-                            .setPositiveButton("OK",null)
-                            .show();
-                }*/
-
             }
         });
 
